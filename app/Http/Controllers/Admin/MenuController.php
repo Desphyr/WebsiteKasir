@@ -62,23 +62,10 @@ class MenuController extends Controller
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image_url' => 'nullable|url',
         ]);
 
-        $data = $request->all();
-
-        if ($request->hasFile('image')) {
-            // Hapus gambar lama jika ada
-            if ($menu->image_url) {
-                // Ubah path URL '/storage/...' kembali ke path file relatif untuk dihapus
-                $oldPath = str_replace('/storage/', '', $menu->image_url);
-                Storage::disk('public')->delete($oldPath);
-            }
-            
-            // Upload gambar baru
-            $path = $request->file('image')->store('products', 'public');
-            $data['image_url'] = '/storage/' . $path;
-        }
+        $data = $request->only(['name', 'category_id', 'price', 'stock', 'image_url']);
 
         $menu->update($data);
 

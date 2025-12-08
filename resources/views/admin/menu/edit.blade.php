@@ -47,9 +47,10 @@
                            class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
                 <div class="md:col-span-2">
-                    <label for="image" class="block text-sm font-medium text-gray-700">Ganti Gambar Menu (Opsional)</label>
-                    <input type="file" name="image" id="image"
-                           class="w-full px-3 py-2 mt-1 text-gray-700 border border-gray-300 rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                    <label for="image_url" class="block text-sm font-medium text-gray-700">Link Gambar Menu (Opsional)</label>
+                    <input type="url" name="image_url" id="image_url" value="{{ old('image_url', $product->image_url) }}"
+                           class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                           placeholder="https://example.com/image.jpg">
                     @if($product->image_url)
                     <div class="mt-4">
                         <p class="text-sm text-gray-600">Gambar Saat Ini:</p>
