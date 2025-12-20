@@ -5,6 +5,26 @@
 @section('content')
 <div class="flex flex-col h-full lg:flex-row" x-data="posSystem()">
     
+    <!-- Header: Navigation -->
+    <div class="flex items-center justify-between p-4 mb-4 bg-white rounded-lg shadow">
+        <div class="flex items-center gap-4">
+            <h1 class="text-2xl font-bold text-gray-900">Kasir</h1>
+            <div class="flex bg-gray-100 rounded-lg p-1">
+                <button @click="window.location.href='{{ route('kasir.pos') }}'" 
+                        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md">
+                    POS
+                </button>
+                <button @click="window.location.href='{{ route('kasir.pos.history') }}'" 
+                        class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-md">
+                    History Order
+                </button>
+            </div>
+        </div>
+        <div class="text-sm text-gray-600">
+            {{ Auth::user()->name }} - {{ now()->format('d/m/Y H:i') }}
+        </div>
+    </div>
+    
     <!-- Area Menu (Sebelah Kiri) -->
     <div class="w-full lg:w-3/5 xl:w-2/3">
         <div class="p-4 bg-white rounded-lg shadow">
@@ -100,10 +120,42 @@
                     <!-- Tipe Pembayaran -->
                     <div class="mb-4">
                         <label class="block mb-2 text-sm font-medium text-gray-700">Tipe Pembayaran</label>
-                        <select name="payment_type" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                        <select name="payment_type" x-model="paymentType" @change="paymentTypeChanged" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
                             <option value="Cash">Cash</option>
                             <option value="QRIS">QRIS</option>
                         </select>
+                    </div>
+
+                    <!-- Input Cash Amount (hanya muncul jika Cash) -->
+                    <div class="mb-4" x-show="paymentType === 'Cash'" x-transition>
+                        <label class="block mb-2 text-sm font-medium text-gray-700">Uang Yang Diberikan</label>
+                        <input type="number" name="cash_amount" x-model="cashAmount" @input="calculateChange" min="0" step="100" 
+                               :required="paymentType === 'Cash'" placeholder="Masukkan jumlah uang customer"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                        <template x-if="paymentType === 'Cash' && cashAmount > 0">
+                            <div class="mt-2 p-2 bg-green-50 border border-green-200 rounded-md">
+                                <div class="flex justify-between text-sm">
+                                    <span>Total Belanja:</span>
+                                    <span class="font-semibold" x-text="formatCurrency(totalPrice)"></span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Uang Diberikan:</span>
+                                    <span class="font-semibold" x-text="formatCurrency(cashAmount)"></span>
+                                </div>
+                                <template x-if="cashAmount >= totalPrice">
+                                    <div class="flex justify-between text-sm font-bold text-green-700 border-t border-green-200 pt-2 mt-2">
+                                        <span>Kembalian:</span>
+                                        <span x-text="formatCurrency(cashAmount - totalPrice)"></span>
+                                    </div>
+                                </template>
+                                <template x-if="cashAmount < totalPrice">
+                                    <div class="flex justify-between text-sm font-bold text-red-700 border-t border-red-200 pt-2 mt-2">
+                                        <span>Kurang:</span>
+                                        <span x-text="formatCurrency(totalPrice - cashAmount)"></span>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
                     </div>
 
                     <!-- Hidden Inputs untuk Form -->
@@ -132,9 +184,13 @@
             cart: [],
             search: '',
             category: '',
+            paymentType: 'Cash',
+            cashAmount: 0,
 
             init() {
                 this.filteredProducts = this.products;
+                // Set default payment type
+                this.paymentType = 'Cash';
                 // NF-01: Waktu muat halaman < 3 detik (data sudah di-load)
             },
 
@@ -144,6 +200,17 @@
                     const categoryMatch = this.category === '' || product.category_id == this.category;
                     return nameMatch && categoryMatch;
                 });
+            },
+
+            paymentTypeChanged() {
+                if (this.paymentType === 'QRIS') {
+                    this.cashAmount = 0;
+                }
+            },
+
+            calculateChange() {
+                // This method will trigger automatically when cashAmount changes
+                // The calculation is handled in the template using x-text
             },
 
             addToCart(product) {

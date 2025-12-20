@@ -37,7 +37,8 @@ class POSController extends Controller
         $request->validate([
             'payment_type' => 'required|in:QRIS,Cash',
             'cart' => 'required|json',
-            'total' => 'required|numeric|min:0'
+            'total' => 'required|numeric|min:0',
+            'cash_amount' => 'nullable|numeric|min:0'
         ]);
 
         $cart = json_decode($request->cart, true);
@@ -45,14 +46,31 @@ class POSController extends Controller
             return back()->with('error', 'Keranjang kosong.');
         }
 
+        // Validasi cash amount jika pembayaran cash
+        if ($request->payment_type === 'Cash') {
+            if (!$request->has('cash_amount') || !$request->cash_amount) {
+                return back()->with('error', 'Masukkan jumlah uang cash yang diberikan customer.');
+            }
+            if ($request->cash_amount < $request->total) {
+                return back()->with('error', 'Jumlah uang cash tidak mencukupi untuk pembayaran.');
+            }
+        }
+
         // Gunakan DB Transaction (NF-04)
         try {
             DB::beginTransaction();
+
+            $changeAmount = 0;
+            if ($request->payment_type === 'Cash') {
+                $changeAmount = $request->cash_amount - $request->total;
+            }
 
             $transaction = Transaction::create([
                 'user_id' => Auth::id(),
                 'total_amount' => $request->total,
                 'payment_type' => $request->payment_type,
+                'cash_amount' => $request->cash_amount,
+                'change_amount' => $changeAmount,
                 'transaction_time' => now(),
             ]);
 
@@ -76,12 +94,80 @@ class POSController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('kasir.pos')->with('success', 'Transaksi berhasil!');
+            
+            $message = 'Transaksi berhasil!';
+            if ($request->payment_type === 'Cash' && $changeAmount > 0) {
+                $message .= ' Kembalian: Rp ' . number_format($changeAmount, 0, ',', '.');
+            }
+            
+            return redirect()->route('kasir.pos')->with('success', $message);
 
         } catch (\Exception $e) {
             DB::rollBack();
             // NF-04: Pesan error jelas
             return back()->with('error', 'Transaksi Gagal: ' . $e->getMessage());
         }
+    }
+
+    public function history(Request $request)
+    {
+        $query = Transaction::with(['user', 'details.product'])
+            ->where('user_id', Auth::id()); // Hanya tampilkan transaksi user ini
+
+        // Filter berdasarkan tanggal
+        if ($request->has('start_date') && $request->start_date) {
+            $query->whereDate('transaction_time', '>=', $request->start_date);
+        }
+        if ($request->has('end_date') && $request->end_date) {
+            $query->whereDate('transaction_time', '<=', $request->end_date);
+        }
+
+        // Filter berdasarkan periode predefined
+        if ($request->has('period')) {
+            switch ($request->period) {
+                case 'today':
+                    $query->whereDate('transaction_time', today());
+                    break;
+                case 'week':
+                    $query->whereBetween('transaction_time', [now()->startOfWeek(), now()->endOfWeek()]);
+                    break;
+                case 'month':
+                    $query->whereMonth('transaction_time', now()->month)
+                          ->whereYear('transaction_time', now()->year);
+                    break;
+            }
+        }
+
+        $transactions = $query->orderBy('transaction_time', 'desc')
+            ->paginate(15); // Pagination untuk performance
+
+        return view('cashier.history', compact('transactions'));
+    }
+
+    public function showTransactionDetail($id)
+    {
+        try {
+            $transaction = Transaction::with([
+                'user', 
+                'details.product'
+            ])->where('user_id', Auth::id())
+              ->findOrFail($id);
+
+            return view('cashier.history-detail', compact('transaction'));
+        } catch (\Exception $e) {
+            return redirect()->route('kasir.pos.history')
+                ->with('error', 'Transaksi tidak ditemukan.');
+        }
+    }
+
+    public function getRecentTransactions()
+    {
+        $recentTransactions = Transaction::with(['user', 'details.product'])
+            ->where('user_id', Auth::id())
+            ->orderBy('transaction_time', 'desc')
+            ->limit(5)
+            ->get();
+
+        return response()->json($recentTransactions);
     }
 }

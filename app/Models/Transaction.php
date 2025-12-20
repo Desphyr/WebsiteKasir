@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Transaction extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'total_amount', 'payment_type', 'transaction_time'];
+    protected $fillable = ['user_id', 'total_amount', 'payment_type', 'transaction_time', 'cash_amount', 'change_amount'];
 
     protected $casts = [
         'transaction_time' => 'datetime',
