@@ -51,7 +51,7 @@
             @include('layouts.partials.notifications')
 
             <!-- Grid Menu -->
-            <div class="grid grid-cols-2 gap-4 overflow-y-auto sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 h-[calc(100vh-220px)] no-scrollbar p-1">
+            <div class="grid grid-cols-3 gap-4 overflow-y-auto h-[calc(100vh-220px)] no-scrollbar p-1">
                 <template x-for="product in filteredProducts" :key="product.id">
                     <div class="overflow-hidden bg-white border border-gray-200 rounded-lg shadow-sm cursor-pointer hover:shadow-md" 
                          @click="product.stock > 0 ? addToCart(product) : alert('Stok produk habis!')">
