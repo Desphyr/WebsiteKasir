@@ -90,7 +90,7 @@
 
     <div class="w-96 bg-white border-l border-gray-200 flex flex-col shadow-2xl z-20 h-full relative">
         
-        <div class="p-5 bg-gradient-to-r from-indigo-600 to-blue-500 text-white shadow-md shrink-0 rounded-bl-xl">
+        <div class="p-5 bg-linear-to-r from-indigo-600 to-blue-500 text-white shadow-md shrink-0 rounded-bl-xl">
             <h2 class="text-lg font-bold flex items-center justify-between">
                 <span>🛒 Pesanan</span>
                 <span class="text-xs font-bold text-indigo-600 bg-white px-2.5 py-1 rounded-full shadow-sm" x-text="`${totalItems} Item`"></span>

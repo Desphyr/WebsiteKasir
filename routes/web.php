@@ -45,8 +45,8 @@ Route::controller(AuthController::class)->group(function () {
     // Lupa Password
     Route::get('forgot-password', 'showForgotPassword')->name('password.request')->middleware('guest');
     Route::post('forgot-password', 'sendResetLink')->name('password.username')->middleware('guest');
-    // Route::get('reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset')->middleware('guest');
-    // Route::post('reset-password', [AuthController::class, 'reset'])->name('password.update')->middleware('guest');
+    Route::get('reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset')->middleware('guest');
+    Route::post('reset-password', [AuthController::class, 'reset'])->name('password.update')->middleware('guest');
 });
 
 

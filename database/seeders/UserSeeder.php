@@ -18,8 +18,8 @@ class UserSeeder extends Seeder
         User::create([
             'full_name' => 'Alfianti',
             'username' => 'alfianti',
-            'email' => 'alfianti@example.com', // Email opsional, boleh diisi
-            'password' => Hash::make('password123'), // Ganti 'password123' dengan password aman
+            'email' => 'alfianti@testmail.com', // Email untuk testing reset password
+            'password' => Hash::make('password123'),
             'role' => 'admin',
         ]);
 
@@ -27,9 +27,18 @@ class UserSeeder extends Seeder
         User::create([
             'full_name' => 'Salsabila',
             'username' => 'salsabila',
-            'email' => 'salsabila@example.com', // Email opsional
-            'password' => Hash::make('password123'), // Ganti 'password123' dengan password aman
+            'email' => 'salsabila@testmail.com', // Email untuk testing reset password
+            'password' => Hash::make('password123'),
             'role' => 'kasir',
+        ]);
+
+        // 3. User tambahan untuk testing
+        User::create([
+            'full_name' => 'Test Admin',
+            'username' => 'testadmin',
+            'email' => 'testadmin@testmail.com',
+            'password' => Hash::make('password123'),
+            'role' => 'admin',
         ]);
     }
 }

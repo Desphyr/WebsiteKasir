@@ -56,7 +56,7 @@ class AuthController extends Controller
         return view('auth.forgot-password');
     }
 
-    // Kirim link reset password (Flow: User input username, sistem cari email, kirim link)
+    // Kirim link reset password
     public function sendResetLink(Request $request) {
         $request->validate(['username' => 'required|string|exists:users,username']);
 
@@ -66,17 +66,45 @@ class AuthController extends Controller
             return back()->withErrors(['username' => 'Akun ini tidak memiliki email terdaftar untuk pemulihan.']);
         }
         
-        // Logika untuk mengirim link reset password ke $user->email
-        // Ini memerlukan setup Notifikasi dan Mailer Laravel.
-        // Untuk sederhananya:
-        // 1. Buat token: $token = Password::broker()->createToken($user);
-        // 2. Simpan token di tabel 'password_reset_tokens'
-        // 3. Kirim email ke $user->email berisi link ke route('password.reset', $token)
+        // Generate token
+        $token = app('auth.password.broker')->createToken($user);
         
-        // Placeholder untuk logika pengiriman email:
-        // Mail::to($user->email)->send(new PasswordResetLinkMail($token, $user->username));
+        // Send custom notification
+        $user->notify(new \App\Notifications\ResetPasswordNotification($token));
 
         return back()->with('status', 'Link reset password telah dikirim ke email Anda!');
+    }
+
+    // Menampilkan form reset password
+    public function showResetForm(Request $request, $token) {
+        return view('auth.reset-password', [
+            'token' => $token,
+            'email' => $request->email
+        ]);
+    }
+
+    // Proses reset password
+    public function reset(Request $request) {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->save();
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            return redirect()->route('login')->with('status', 'Password berhasil direset! Silakan login dengan password baru.');
+        }
+
+        return back()->withErrors(['email' => 'Token reset password tidak valid atau sudah kedaluwarsa.']);
     }
 }
 
