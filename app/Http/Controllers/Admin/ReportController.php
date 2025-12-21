@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 // Untuk Excel, pastikan Anda sudah: composer require maatwebsite/excel
 use Maatwebsite\Excel\Facades\Excel;
-// Anda perlu membuat App\Exports\SalesExport
-// php artisan make:export SalesExport
+use App\Exports\SalesExport;
 
 class ReportController extends Controller
 {
@@ -34,11 +34,39 @@ class ReportController extends Controller
         $startDate = $request->input('start_date', now()->format('Y-m-d'));
         $endDate = $request->input('end_date', now()->format('Y-m-d'));
 
-        // Logika untuk ekspor Excel. Anda perlu membuat class SalesExport.
-        // return Excel::download(new \App\Exports\SalesExport($startDate, $endDate), 'laporan-penjualan.xlsx');
+        // Validasi tanggal
+        if (!$startDate || !$endDate) {
+            return redirect()->route('admin.laporan.index')
+                ->with('error', 'Tanggal mulai dan tanggal akhir harus diisi.');
+        }
 
-        // Placeholder
-        return redirect()->route('admin.laporan.index')
-            ->with('info', 'Fitur ekspor sedang dalam pengembangan. Anda perlu membuat App\Exports\SalesExport.');
+        try {
+            // Cek apakah ada transaksi dalam rentang tanggal
+            $hasTransactions = Transaction::whereBetween('transaction_time', [
+                \Carbon\Carbon::parse($startDate)->startOfDay(),
+                \Carbon\Carbon::parse($endDate)->endOfDay()
+            ])->exists();
+
+            if (!$hasTransactions) {
+                return redirect()->route('admin.laporan.index')
+                    ->with('warning', 'Tidak ada transaksi untuk rentang tanggal yang dipilih.');
+            }
+
+            // Generate nama file dengan format tanggal
+            $fileName = 'laporan-penjualan-' . $startDate . '-to-' . $endDate . '.xlsx';
+
+            // Gunakan SalesExport untuk mendapatkan data
+            $salesExport = new SalesExport($startDate, $endDate);
+
+            // Buat file Excel dengan syntax modern
+            return Excel::download($salesExport, $fileName);
+
+        } catch (\Exception $e) {
+            // Log error untuk debugging
+            Log::error('Error exporting sales report: ' . $e->getMessage());
+            
+            return redirect()->route('admin.laporan.index')
+                ->with('error', 'Terjadi kesalahan saat mengekspor laporan. Silakan coba lagi.');
+        }
     }
 }
