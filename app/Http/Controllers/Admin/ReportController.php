@@ -5,8 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-// Untuk Excel, pastikan Anda sudah: composer require maatwebsite/excel
-use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Exports\SalesExport;
 
 class ReportController extends Controller
@@ -55,11 +54,19 @@ class ReportController extends Controller
             // Generate nama file dengan format tanggal
             $fileName = 'laporan-penjualan-' . $startDate . '-to-' . $endDate . '.xlsx';
 
-            // Gunakan SalesExport untuk mendapatkan data
+            // Gunakan SalesExport untuk mendapatkan spreadsheet
             $salesExport = new SalesExport($startDate, $endDate);
+            $spreadsheet = $salesExport->generate();
 
-            // Buat file Excel dengan syntax modern
-            return Excel::download($salesExport, $fileName);
+            // Download file
+            $writer = new Xlsx($spreadsheet);
+            
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="' . $fileName . '"');
+            header('Cache-Control: max-age=0');
+            
+            $writer->save('php://output');
+            exit;
 
         } catch (\Exception $e) {
             // Log error untuk debugging
