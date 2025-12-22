@@ -148,12 +148,12 @@
                         <button type="button" @click="paymentType = 'Cash'; cashAmount = 0" 
                                 class="px-3 py-2.5 text-sm font-bold rounded-lg border transition-all duration-200 flex items-center justify-center gap-2"
                                 :class="paymentType === 'Cash' ? 'border-indigo-600 bg-indigo-600 text-white shadow-md' : 'border-gray-300 text-gray-600 hover:bg-gray-50'">
-                            💵 Tunai
+                            Tunai
                         </button>
                         <button type="button" @click="paymentType = 'QRIS'; cashAmount = 0"
                                 class="px-3 py-2.5 text-sm font-bold rounded-lg border transition-all duration-200 flex items-center justify-center gap-2"
                                 :class="paymentType === 'QRIS' ? 'border-indigo-600 bg-indigo-600 text-white shadow-md' : 'border-gray-300 text-gray-600 hover:bg-gray-50'">
-                            📱 QRIS
+                            QRIS
                         </button>
                     </div>
                     <input type="hidden" name="payment_type" x-model="paymentType">
