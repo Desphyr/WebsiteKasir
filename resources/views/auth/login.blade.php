@@ -80,7 +80,7 @@
 
                     <!-- Input Username -->
                     <div class="group">
-                        <label for="username" class="block text-sm font-bold italic text-gray-900 mb-1 ml-1">User Nama</label>
+                        <label for="username" class="block text-sm font-bold italic text-gray-900 mb-1 ml-1">Username</label>
                         <input id="username" name="username" type="text" value="{{ old('username') }}" required autofocus
                                class="w-full bg-transparent border-0 border-b-[2.5px] border-gray-800 text-gray-900 text-base py-2 px-1 focus:ring-0 focus:border-[#E13B23] transition-colors placeholder-gray-600/50 font-medium"
                                placeholder="">
