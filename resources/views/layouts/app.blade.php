@@ -100,9 +100,14 @@
                         </a>
                     
                     @elseif(Auth::user()->role === 'kasir')
-                        <!-- Halaman Kasir -->
-                        <a href="{{ route('kasir.pos') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('kasir.pos*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
-                            Halaman Kasir
+                        <!-- Halaman Kasir (POS) -->
+                        <a href="{{ route('kasir.pos') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('kasir.pos') && !request()->routeIs('kasir.pos.history*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
+                            POS
+                        </a>
+                        
+                        <!-- Riwayat Transaksi -->
+                        <a href="{{ route('kasir.pos.history') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('kasir.pos.history*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
+                            History
                         </a>
                     @endif
                 </nav>

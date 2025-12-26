@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Halaman Kasir')
+@section('title', 'Point of Sale (POS)')
 
 @section('content')
 <div class="flex h-[calc(100vh-(--spacing(16)))] overflow-hidden bg-gray-50" x-data="posSystem()">
@@ -12,16 +12,6 @@
                 <h1 class="text-2xl font-extrabold text-gray-800">
                     Kasir
                 </h1>
-                <div class="flex bg-gray-100 rounded-lg p-1">
-                    <button @click="window.location.href='{{ route('kasir.pos') }}'" 
-                            class="px-4 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded shadow-sm">
-                        POS
-                    </button>
-                    <button @click="window.location.href='{{ route('kasir.pos.history') }}'" 
-                            class="px-4 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 rounded hover:bg-gray-200 transition">
-                        History
-                    </button>
-                </div>
             </div>
             <div class="text-sm font-medium text-gray-500 bg-gray-50 px-3 py-1 rounded-full border border-gray-200 flex items-center gap-2">
                 <span>👤 {{ Auth::user()->name }}</span>

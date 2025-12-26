@@ -61,7 +61,7 @@
                                     Riwayat Transaksi
                                     @break
                                 @default
-                                    Halaman Kasir
+                                    Point of Sale (POS)
                             @endswitch
                         @endif
                     </h1>
