@@ -95,6 +95,7 @@ Route::middleware(['auth', 'role:kasir', \App\Http\Middleware\PreventBackHistory
     // History Transaksi
     Route::get('pos/history', [POSController::class, 'history'])->name('pos.history');
     Route::get('pos/history/{id}', [POSController::class, 'showTransactionDetail'])->name('pos.history.show');
+    Route::get('pos/history/{id}/export', [POSController::class, 'exportTransaction'])->name('pos.history.export');
     
     // API untuk data recent (optional)
     Route::get('pos/recent', [POSController::class, 'getRecentTransactions'])->name('pos.recent');

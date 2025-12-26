@@ -25,54 +25,95 @@
 </head>
 <body class="bg-gray-100 font-sans antialiased">
     
-    <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-100">
-        <!-- Sidebar (Hanya tampil jika user login) -->
+    <div x-data="{ sidebarOpen: false }" class="flex flex-col h-screen bg-gray-100">
         @auth
-        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 z-30 w-64 transform bg-gray-900 text-white overflow-y-auto transition duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0">
-            <div class="flex items-center justify-center p-4 bg-gray-800">
-                <span class="text-2xl font-bold">Bakaran Dua Hati</span>
-            </div>
-            
-            <nav class="mt-4">
-                @if(Auth::user()->role === 'admin')
-                    <!-- Menu Admin -->
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.dashboard*') ? 'bg-gray-700 font-bold' : '' }}">Dashboard</a>
-                    <a href="{{ route('admin.menu.index') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.menu*') ? 'bg-gray-700 font-bold' : '' }}">Manajemen Menu</a>
-                    <a href="{{ route('admin.kategori.index') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.kategori*') ? 'bg-gray-700 font-bold' : '' }}">Manajemen Kategori</a>
-                    <a href="{{ route('admin.laporan.index') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.laporan*') ? 'bg-gray-700 font-bold' : '' }}">Laporan Penjualan</a>
-                    <a href="{{ route('admin.pengeluaran.index') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.pengeluaran*') ? 'bg-gray-700 font-bold' : '' }}">Catat Pengeluaran</a>
-                    <a href="{{ route('admin.staf.index') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.staf*') ? 'bg-gray-700 font-bold' : '' }}">Manajemen Staf</a>
-                    <a href="{{ route('admin.profil.edit') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.profil*') ? 'bg-gray-700 font-bold' : '' }}">Profil</a>
-                
-                @elseif(Auth::user()->role === 'kasir')
-                    <!-- Menu Kasir -->
-                    <a href="{{ route('kasir.pos') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white {{ request()->routeIs('kasir.pos*') ? 'bg-gray-700 font-bold' : '' }}">Halaman Kasir</a>
-                    <!-- Kasir bisa punya profil juga -->
-                    <!-- <a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white">Profil</a> -->
-                @endif
-                
-                <!-- Tombol Logout -->
-                <form action="{{ route('logout') }}" method="POST" class="w-full">
-                    @csrf
-                    <button type="submit" class="flex items-center w-full px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white">Logout</button>
-                </form>
-            </nav>
-        </aside>
+        <!-- Header dengan design retro -->
+        @include('layouts.partials.header')
+        
+        <!-- Header Mobile Toggle -->
+        <header class="flex items-center justify-between p-4 bg-white border-b lg:hidden">
+            <button @click="sidebarOpen = true" class="text-gray-500 focus:outline-none lg:hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+            <h1 class="text-xl font-semibold">@yield('title')</h1>
+            <div></div> <!-- Spacer -->
+        </header>
         @endauth
         
-        <!-- Konten Utama -->
-        <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Sidebar dan Content -->
+        <div class="flex flex-1 overflow-hidden">
+            <!-- Sidebar (Hanya tampil jika user login) -->
             @auth
-            <!-- Header -->
-            <header class="flex items-center justify-between p-4 bg-white border-b lg:hidden">
-                <button @click="sidebarOpen = true" class="text-gray-500 focus:outline-none lg:hidden">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
-                <h1 class="text-xl font-semibold">@yield('title')</h1>
-                <div></div> <!-- Spacer -->
-            </header>
-            @endauth
+            <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 z-30 w-64 transform bg-yellow-100 text-gray-900 overflow-y-auto transition duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 shadow-lg">
 
+                <!-- Ikon Atas -->
+                <div class="p-6 border-b-2 border-yellow-300">
+                    <div class="flex justify-center">
+                        @php
+                            $currentRoute = Route::currentRouteName();
+                            $sidebarIcon = match(true) {
+                                str_contains($currentRoute, 'admin.dashboard') => 'sidebar-dashboard.png',
+                                str_contains($currentRoute, 'admin.menu') => 'sidebar-menu.png',
+                                str_contains($currentRoute, 'admin.kategori') => 'list-icon.svg',
+                                str_contains($currentRoute, 'admin.laporan') => 'sidebar-laporan.png',
+                                str_contains($currentRoute, 'admin.pengeluaran') => 'sidebar-pembukuan.png',
+                                str_contains($currentRoute, 'admin.staf') => 'sidebar-staf.png',
+                                str_contains($currentRoute, 'kasir.pos') => 'sidebar-kasir.png',
+                                default => 'sidebar-icon.png',
+                            };
+                        @endphp
+                        <img src="{{ asset('images/' . $sidebarIcon) }}" alt="Sidebar Icon" class="h-16 w-16 object-cover rounded-lg border-2 border-yellow-400">
+                    </div>
+                </div>
+
+                <!-- Daftar Menu -->
+                <nav class="mt-6 px-4">
+                    @if(Auth::user()->role === 'admin')
+                        <!-- Dashboard -->
+                        <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.dashboard*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
+                            Dashboard
+                        </a>
+                        
+                        <!-- Kelola Menu -->
+                        <a href="{{ route('admin.menu.index') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.menu*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
+                            Kelola menu
+                        </a>
+                        
+                        <!-- Kelola Kategori -->
+                        <a href="{{ route('admin.kategori.index') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.kategori*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
+                            Kelola kategori
+                        </a>
+                        
+                        <!-- Laporan Penjualan -->
+                        <a href="{{ route('admin.laporan.index') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.laporan*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
+                            Laporan Penjualan
+                        </a>
+                        
+                        <!-- Kelola Staf -->
+                        <a href="{{ route('admin.staf.index') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.staf*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
+                            Kelola staf
+                        </a>
+                        
+                        <!-- Pembukuan -->
+                        <a href="{{ route('admin.pengeluaran.index') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.pengeluaran*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
+                            <span class="lowercase">pembukuan</span>
+                        </a>
+                    
+                    @elseif(Auth::user()->role === 'kasir')
+                        <!-- Halaman Kasir (POS) -->
+                        <a href="{{ route('kasir.pos') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('kasir.pos') && !request()->routeIs('kasir.pos.history*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
+                            POS
+                        </a>
+                        
+                        <!-- Riwayat Transaksi -->
+                        <a href="{{ route('kasir.pos.history') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('kasir.pos.history*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
+                            History
+                        </a>
+                    @endif
+                </nav>
+            </aside>
+            @endauth
+            
             <!-- Main Content Area -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4 lg:p-6">
                 @yield('content')

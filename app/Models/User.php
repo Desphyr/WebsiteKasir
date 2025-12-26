@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 
+/**
+ * @property string $role
+ */
 class User extends Authenticatable implements CanResetPassword
 {
     use HasFactory, Notifiable, CanResetPasswordTrait;

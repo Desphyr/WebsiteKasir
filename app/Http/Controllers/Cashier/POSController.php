@@ -9,6 +9,12 @@ use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Font;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Color;
 
 class POSController extends Controller
 {
@@ -169,5 +175,114 @@ class POSController extends Controller
             ->get();
 
         return response()->json($recentTransactions);
+    }
+
+    public function exportTransaction($id)
+    {
+        try {
+            $transaction = Transaction::with([
+                'user', 
+                'details.product'
+            ])->where('user_id', Auth::id())
+              ->findOrFail($id);
+
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            $sheet->setTitle('Detail Transaksi');
+
+            // Set lebar kolom
+            $sheet->getColumnDimension('A')->setWidth(15);
+            $sheet->getColumnDimension('B')->setWidth(30);
+            $sheet->getColumnDimension('C')->setWidth(12);
+            $sheet->getColumnDimension('D')->setWidth(15);
+            $sheet->getColumnDimension('E')->setWidth(15);
+
+            // Header Toko
+            $sheet->setCellValue('A1', 'BAKARAN RESTO');
+            $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+            $sheet->setCellValue('A2', 'Detail Transaksi #' . str_pad($transaction->id, 6, '0', STR_PAD_LEFT));
+            $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(11);
+
+            // Informasi Transaksi
+            $sheet->setCellValue('A4', 'ID Transaksi:');
+            $sheet->setCellValue('B4', '#' . str_pad($transaction->id, 6, '0', STR_PAD_LEFT));
+            $sheet->setCellValue('A5', 'Waktu:');
+            $sheet->setCellValue('B5', $transaction->transaction_time->format('d/m/Y H:i:s'));
+            $sheet->setCellValue('A6', 'Kasir:');
+            $sheet->setCellValue('B6', $transaction->user->name);
+            $sheet->setCellValue('A7', 'Tipe Pembayaran:');
+            $sheet->setCellValue('B7', $transaction->payment_type);
+
+            // Header Tabel Item
+            $sheet->setCellValue('A9', 'No');
+            $sheet->setCellValue('B9', 'Nama Menu');
+            $sheet->setCellValue('C9', 'Qty');
+            $sheet->setCellValue('D9', 'Harga Satuan');
+            $sheet->setCellValue('E9', 'Total');
+
+            // Style header tabel
+            $headerStyle = [
+                'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+                'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '4F46E5']],
+                'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]
+            ];
+            $sheet->getStyle('A9:E9')->applyFromArray($headerStyle);
+
+            // Data Item
+            $row = 10;
+            $no = 1;
+            foreach ($transaction->details as $detail) {
+                $sheet->setCellValue('A' . $row, $no);
+                $sheet->setCellValue('B' . $row, $detail->product->name);
+                $sheet->setCellValue('C' . $row, $detail->quantity);
+                $sheet->setCellValue('D' . $row, $detail->price_per_item);
+                $sheet->setCellValue('E' . $row, $detail->quantity * $detail->price_per_item);
+
+                // Format currency
+                $sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode('Rp #,##0');
+                $sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('Rp #,##0');
+
+                $row++;
+                $no++;
+            }
+
+            // Summary
+            $summaryRow = $row + 1;
+            $sheet->setCellValue('D' . $summaryRow, 'Total:');
+            $sheet->getStyle('D' . $summaryRow)->getFont()->setBold(true);
+            $sheet->setCellValue('E' . $summaryRow, $transaction->total_amount);
+            $sheet->getStyle('E' . $summaryRow)->getFont()->setBold(true);
+            $sheet->getStyle('E' . $summaryRow)->getNumberFormat()->setFormatCode('Rp #,##0');
+
+            // Jika pembayaran cash, tampilkan kembalian
+            if ($transaction->payment_type === 'Cash') {
+                $summaryRow++;
+                $sheet->setCellValue('D' . $summaryRow, 'Uang Diberikan:');
+                $sheet->setCellValue('E' . $summaryRow, $transaction->cash_amount);
+                $sheet->getStyle('E' . $summaryRow)->getNumberFormat()->setFormatCode('Rp #,##0');
+
+                $summaryRow++;
+                $sheet->setCellValue('D' . $summaryRow, 'Kembalian:');
+                $sheet->getStyle('D' . $summaryRow)->getFont()->setBold(true)->setColor(new Color('FF00B050'));
+                $sheet->setCellValue('E' . $summaryRow, $transaction->change_amount);
+                $sheet->getStyle('E' . $summaryRow)->getFont()->setBold(true)->setColor(new Color('FF00B050'));
+                $sheet->getStyle('E' . $summaryRow)->getNumberFormat()->setFormatCode('Rp #,##0');
+            }
+
+            // Generate file
+            $writer = new Xlsx($spreadsheet);
+            $filename = 'transaksi_' . str_pad($transaction->id, 6, '0', STR_PAD_LEFT) . '_' . now()->format('YmdHis') . '.xlsx';
+
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="' . $filename . '"');
+            header('Cache-Control: max-age=0');
+
+            $writer->save('php://output');
+            exit;
+
+        } catch (\Exception $e) {
+            return redirect()->route('kasir.pos.history')
+                ->with('error', 'Gagal mengekspor transaksi: ' . $e->getMessage());
+        }
     }
 }

@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container p-4 mx-auto">
-    <h1 class="mb-6 text-3xl font-bold">Manajemen Menu</h1>
+    <h1 class="mb-6 text-3xl font-bold">Kelola Menu</h1>
 
     @include('layouts.partials.notifications')
 

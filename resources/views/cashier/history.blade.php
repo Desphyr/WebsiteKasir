@@ -9,16 +9,6 @@
     <div class="flex items-center justify-between p-4 mb-4 bg-white rounded-lg shadow">
         <div class="flex items-center gap-4">
             <h1 class="text-2xl font-bold text-gray-900">History Order</h1>
-            <div class="flex bg-gray-100 rounded-lg p-1">
-                <button @click="window.location.href='{{ route('kasir.pos') }}'" 
-                        class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-md">
-                    POS
-                </button>
-                <button @click="window.location.href='{{ route('kasir.pos.history') }}'" 
-                        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md">
-                    History Order
-                </button>
-            </div>
         </div>
         <div class="text-sm text-gray-600">
             {{ Auth::user()->name }} - {{ now()->format('d/m/Y H:i') }}

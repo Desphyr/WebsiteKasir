@@ -11,11 +11,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Memanggil UserSeeder yang baru kita buat
+        // Memanggil UserSeeder dan MenuSeeder
         $this->call([
             UserSeeder::class,
-            // Anda bisa tambahkan Seeder lain di sini,
-            // misal: CategorySeeder::class, ProductSeeder::class
+            MenuSeeder::class,
         ]);
     }
 }

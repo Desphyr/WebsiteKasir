@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Halaman Kasir')
+@section('title', 'Point of Sale (POS)')
 
 @section('content')
-<div class="flex h-[calc(100vh-(--spacing(16)))] overflow-hidden bg-gray-50" x-data="posSystem()">
+<div class="flex h-[calc(100vh-(--spacing(16)))] bg-gray-50" x-data="posSystem()">
     
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         
@@ -12,16 +12,6 @@
                 <h1 class="text-2xl font-extrabold text-gray-800">
                     Kasir
                 </h1>
-                <div class="flex bg-gray-100 rounded-lg p-1">
-                    <button @click="window.location.href='{{ route('kasir.pos') }}'" 
-                            class="px-4 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded shadow-sm">
-                        POS
-                    </button>
-                    <button @click="window.location.href='{{ route('kasir.pos.history') }}'" 
-                            class="px-4 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 rounded hover:bg-gray-200 transition">
-                        History
-                    </button>
-                </div>
             </div>
             <div class="text-sm font-medium text-gray-500 bg-gray-50 px-3 py-1 rounded-full border border-gray-200 flex items-center gap-2">
                 <span>👤 {{ Auth::user()->name }}</span>
@@ -47,48 +37,52 @@
         <main class="flex-1 overflow-y-auto p-6 pt-0 scroll-smooth custom-scrollbar">
             @include('layouts.partials.notifications')
 
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-6 pb-20">
-                <template x-for="product in filteredProducts" :key="product.id">
-                    <div class="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-xl hover:border-indigo-400 transition-all duration-200 cursor-pointer overflow-hidden flex flex-col"
-                         @click="product.stock > 0 ? addToCart(product) : null">
-                        
-                        <div class="relative aspect-square overflow-hidden bg-gray-100">
-                            <img :src="product.image_url || 'https://placehold.co/400x400/f1f5f9/94a3b8?text=Menu'" 
-                                 :alt="product.name" 
-                                 class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300">
+            <!-- Menu Grid Section (with right padding for fixed payment) -->
+            <div class="pr-96 pb-6">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                    <template x-for="product in filteredProducts" :key="product.id">
+                        <div class="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-xl hover:border-indigo-400 transition-all duration-200 cursor-pointer overflow-hidden flex flex-col"
+                             @click="product.stock > 0 ? addToCart(product) : null">
                             
-                            <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
+                            <div class="relative aspect-square overflow-hidden bg-gray-100">
+                                <img :src="product.image_url || 'https://placehold.co/400x400/f1f5f9/94a3b8?text=Menu'" 
+                                     :alt="product.name" 
+                                     class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300">
+                                
+                                <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
 
-                            <template x-if="product.stock <= 0">
-                                <div class="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-[1px] z-20">
-                                    <span class="bg-red-600 text-white text-sm font-bold px-4 py-1 rounded-full uppercase tracking-wider shadow-lg transform -rotate-12">Habis</span>
-                                </div>
-                            </template>
-                        </div>
+                                <template x-if="product.stock <= 0">
+                                    <div class="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-[1px] z-20">
+                                        <span class="bg-red-600 text-white text-sm font-bold px-4 py-1 rounded-full uppercase tracking-wider shadow-lg transform -rotate-12">Habis</span>
+                                    </div>
+                                </template>
+                            </div>
 
-                        <div class="p-4 text-center bg-white flex flex-col items-center justify-center gap-2 h-auto min-h-[90px]">
-                            <h3 class="font-bold text-gray-800 text-base leading-tight line-clamp-2 group-hover:text-indigo-600 transition-colors" x-text="product.name"></h3>
-                            <span class="px-2 py-0.5 text-xs font-medium rounded-full border"
-                                  :class="product.stock > 5 ? 'text-gray-500 border-gray-200 bg-gray-50' : (product.stock > 0 ? 'text-yellow-600 border-yellow-200 bg-yellow-50' : 'text-red-500 border-red-200 bg-red-50')"
-                                  x-text="`Stok: ${product.stock}`">
-                            </span>
+                            <div class="p-4 text-center bg-white flex flex-col items-center justify-center gap-2 h-auto min-h-[90px]">
+                                <h3 class="font-bold text-gray-800 text-base leading-tight line-clamp-2 group-hover:text-indigo-600 transition-colors" x-text="product.name"></h3>
+                                <span class="px-2 py-0.5 text-xs font-medium rounded-full border"
+                                      :class="product.stock > 5 ? 'text-gray-500 border-gray-200 bg-gray-50' : (product.stock > 0 ? 'text-yellow-600 border-yellow-200 bg-yellow-50' : 'text-red-500 border-red-200 bg-red-50')"
+                                      x-text="`Stok: ${product.stock}`">
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </template>
+                    </template>
 
-                <template x-if="filteredProducts.length === 0">
-                    <div class="col-span-full flex flex-col items-center justify-center py-12 text-center">
-                        <div class="bg-gray-100 p-4 rounded-full mb-3">
-                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <template x-if="filteredProducts.length === 0">
+                        <div class="col-span-full flex flex-col items-center justify-center py-12 text-center">
+                            <div class="bg-gray-100 p-4 rounded-full mb-3">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </div>
+                            <p class="text-gray-500 font-medium">Menu tidak ditemukan.</p>
                         </div>
-                        <p class="text-gray-500 font-medium">Menu tidak ditemukan.</p>
-                    </div>
-                </template>
+                    </template>
+                </div>
             </div>
         </main>
     </div>
 
-    <div class="w-96 bg-white border-l border-gray-200 flex flex-col shadow-2xl z-20 h-full relative">
+    <!-- Fixed Payment Bar -->
+    <div class="w-96 bg-white border-l border-gray-200 flex flex-col shadow-2xl z-20 fixed right-0 top-[calc(4rem+1px)] h-[calc(100vh-4rem)]">
         
         <div class="p-5 bg-linear-to-r from-indigo-600 to-blue-500 text-white shadow-md shrink-0 rounded-bl-xl">
             <h2 class="text-lg font-bold flex items-center justify-between">
@@ -289,3 +283,4 @@
 </style>
 @endpush
 @endsection
+
