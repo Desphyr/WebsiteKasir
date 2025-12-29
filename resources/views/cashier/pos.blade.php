@@ -3,17 +3,17 @@
 @section('title', 'Point of Sale (POS)')
 
 @section('content')
-<div class="flex h-[calc(100vh-(--spacing(16)))] bg-gray-50" x-data="posSystem()">
+<div class="flex h-[calc(100vh-(--spacing(16)))] bg-[#FFFBF0]" x-data="posSystem()">
     
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         
-        <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shrink-0 z-10 shadow-sm">
+        <header class="bg-[#FFF9C4] border-b border-yellow-200 px-6 py-4 flex items-center justify-between shrink-0 z-10 shadow-sm">
             <div class="flex items-center gap-4">
-                <h1 class="text-2xl font-extrabold text-gray-800">
+                <h1 class="text-2xl font-extrabold text-[#3E2723]">
                     Kasir
                 </h1>
             </div>
-            <div class="text-sm font-medium text-gray-500 bg-gray-50 px-3 py-1 rounded-full border border-gray-200 flex items-center gap-2">
+            <div class="text-sm font-medium text-[#8D6E63] bg-[#FFF8E1] px-3 py-1 rounded-full border border-yellow-200 flex items-center gap-2">
                 <span>👤 {{ Auth::user()->name }}</span>
                 <span class="text-gray-300">|</span>
                 <span>🕒 {{ now()->format('H:i') }}</span>

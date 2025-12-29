@@ -8,45 +8,45 @@
 
     @include('layouts.partials.notifications')
 
-    <div class="p-6 bg-white rounded-lg shadow-md">
+    <div class="p-6 bg-[#FFF9C4] rounded-lg shadow-md">
         <!-- Header: Tombol Tambah & Search -->
         <div class="flex flex-col gap-4 mb-6 md:flex-row md:items-center md:justify-between">
             <!-- Tombol Tambah -->
-            <a href="{{ route('admin.menu.create') }}" class="px-6 py-2.5 font-bold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition shadow-md text-center">
+            <a href="{{ route('admin.menu.create') }}" class="px-6 py-2.5 font-bold text-white bg-orange-400 rounded-lg hover:bg-orange-500 transition shadow-md text-center">
                 + Tambah Menu Baru
             </a>
 
             <!-- Form Pencarian -->
             <form method="GET" action="{{ route('admin.menu.index') }}" class="flex w-full md:w-auto gap-2">
                 <input type="text" name="search" placeholder="Cari menu..." value="{{ $search ?? '' }}"
-                       class="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                       class="w-full md:w-64 px-4 py-2 border border-yellow-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 outline-none transition">
                 
                 <!-- TOMBOL CARI -->
-                <button type="submit" class="px-4 py-2 font-semibold text-white bg-gray-800 rounded-lg hover:bg-gray-900 transition">
+                <button type="submit" class="px-4 py-2 font-semibold text-white bg-yellow-600 rounded-lg hover:bg-yellow-700 transition">
                     Cari
                 </button>
             </form>
         </div>
 
         <!-- Tabel Menu -->
-        <div class="overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+        <div class="overflow-x-auto border border-yellow-200 rounded-lg shadow-sm">
+            <table class="min-w-full divide-y divide-yellow-200">
+                <thead class="bg-[#FFF8E1]">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-xs font-bold tracking-wider text-left text-gray-500 uppercase">No</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-bold tracking-wider text-left text-gray-500 uppercase">Gambar</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-bold tracking-wider text-left text-gray-500 uppercase">Nama Menu</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-bold tracking-wider text-left text-gray-500 uppercase">Kategori</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-bold tracking-wider text-left text-gray-500 uppercase">Stok</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-bold tracking-wider text-left text-gray-500 uppercase">Harga</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-bold tracking-wider text-right text-gray-500 uppercase">Aksi</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-bold tracking-wider text-left text-[#8D6E63] uppercase">No</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-bold tracking-wider text-left text-[#8D6E63] uppercase">Gambar</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-bold tracking-wider text-left text-[#8D6E63] uppercase">Nama Menu</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-bold tracking-wider text-left text-[#8D6E63] uppercase">Kategori</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-bold tracking-wider text-left text-[#8D6E63] uppercase">Stok</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-bold tracking-wider text-left text-[#8D6E63] uppercase">Harga</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-bold tracking-wider text-right text-[#8D6E63] uppercase">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="bg-[#FFF9C4] divide-y divide-yellow-200">
                     @forelse ($products as $index => $product)
-                        <tr class="hover:bg-gray-50 transition menu-row" data-id="{{ $product->id }}">
+                        <tr class="hover:bg-yellow-100 transition menu-row" data-id="{{ $product->id }}">
                             <!-- Nomor -->
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-500 font-medium">
+                            <td class="px-6 py-4 whitespace-nowrap text-[#8D6E63] font-medium">
                                 {{ $products->firstItem() + $index }}
                             </td>
                             
@@ -66,12 +66,12 @@
                             
                             <!-- Nama Menu -->
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-bold text-gray-900">{{ $product->name }}</div>
+                                <div class="text-sm font-bold text-[#3E2723]">{{ $product->name }}</div>
                             </td>
                             
                             <!-- Kategori -->
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-200 text-orange-800">
                                     {{ $product->category->name }}
                                 </span>
                             </td>
@@ -89,7 +89,7 @@
                             </td>
                             
                             <!-- Harga -->
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#3E2723]">
                                 Rp {{ number_format($product->price, 0, ',', '.') }}
                             </td>
                             

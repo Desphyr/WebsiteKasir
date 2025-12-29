@@ -9,18 +9,18 @@
     <!-- Notifikasi Sukses/Error -->
     @include('layouts.partials.notifications')
 
-    <div class="p-6 bg-white rounded-lg shadow-md">
+    <div class="p-6 bg-[#FFF9C4] rounded-lg shadow-md">
         <!-- Aksi: Tambah & Filter Tanggal -->
         <div class="flex flex-col items-center justify-between mb-4 space-y-3 md:flex-row md:space-y-0">
-            <a href="{{ route('admin.pengeluaran.create') }}" class="w-full px-4 py-2 font-medium text-center text-white bg-indigo-600 rounded-md md:w-auto hover:bg-indigo-700">
+            <a href="{{ route('admin.pengeluaran.create') }}" class="w-full px-4 py-2 font-medium text-center text-white bg-orange-400 rounded-md md:w-auto hover:bg-orange-500">
                 + Catat Pengeluaran Baru
             </a>
 
             <form method="GET" action="{{ route('admin.pengeluaran.index') }}" class="flex items-center w-full space-x-2 md:w-auto">
-                <label for="date" class="text-sm font-medium text-gray-700">Tampilkan Tanggal:</label>
+                <label for="date" class="text-sm font-medium text-[#8D6E63]">Tampilkan Tanggal:</label>
                 <input type="date" name="date" id="date" value="{{ $searchDate ?? '' }}"
-                       class="px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
+                       class="px-4 py-2 border border-yellow-300 rounded-md focus:ring-yellow-400 focus:border-yellow-400">
+                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-orange-400 rounded-md hover:bg-orange-500">
                     Filter
                 </button>
             </form>
@@ -28,27 +28,27 @@
 
         <!-- Tabel Pengeluaran -->
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+            <table class="min-w-full divide-y divide-yellow-200">
+                <thead class="bg-[#FFF8E1]">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">No</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Tanggal</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Deskripsi</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Dicatat Oleh</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Jumlah</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-right text-gray-500 uppercase">Aksi</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-[#8D6E63] uppercase">No</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-[#8D6E63] uppercase">Tanggal</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-[#8D6E63] uppercase">Deskripsi</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-[#8D6E63] uppercase">Dicatat Oleh</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-[#8D6E63] uppercase">Jumlah</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-right text-[#8D6E63] uppercase">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="bg-[#FFF9C4] divide-y divide-yellow-200">
                     @forelse ($expenses as $index => $expense)
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $expenses->firstItem() + $index }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ \Carbon\Carbon::parse($expense->expense_date)->format('d M Y') }}</td>
-                            <td class="px-6 py-4 text-gray-900">{{ $expense->description }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ $expense->user->full_name }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-[#8D6E63]">{{ $expenses->firstItem() + $index }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-[#8D6E63]">{{ \Carbon\Carbon::parse($expense->expense_date)->format('d M Y') }}</td>
+                            <td class="px-6 py-4 text-[#3E2723]">{{ $expense->description }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-[#8D6E63]">{{ $expense->user->full_name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap font-medium text-red-600">- Rp {{ number_format($expense->amount, 0, ',', '.') }}</td>
                             <td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                                <a href="{{ route('admin.pengeluaran.edit', $expense->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                <a href="{{ route('admin.pengeluaran.edit', $expense->id) }}" class="text-orange-600 hover:text-orange-900">Edit</a>
                                 <form action="{{ route('admin.pengeluaran.destroy', $expense->id) }}" method="POST" class="inline-block ml-2" onsubmit="return confirm('Yakin ingin menghapus catatan ini?');">
                                     @csrf
                                     @method('DELETE')
