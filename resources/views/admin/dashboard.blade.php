@@ -3,146 +3,164 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div class="container p-4 mx-auto">
-    <h1 class="mb-6 text-3xl font-bold">Dashboard Admin</h1>
+<div class="min-h-screen bg-[#FFFBF0] overflow-x-hidden">
+    <div class="max-w-6xl mx-auto px-6 py-6 space-y-6">
 
-    <!-- Ringkasan Hari Ini -->
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <!-- Pendapatan Hari Ini -->
-        <div class="p-6 bg-white rounded-lg shadow-md">
-            <h3 class="text-lg font-medium text-gray-600">Pendapatan Hari Ini</h3>
-            <p class="mt-2 text-3xl font-bold text-indigo-600">Rp {{ number_format($pendapatanHariIni, 0, ',', '.') }}</p>
-            <p class="mt-1 text-sm text-gray-500">(Reset pukul 00.00 WIB)</p>
+        {{-- HEADER --}}
+        <div class="bg-[#FFF8E1] rounded-[2.5rem] px-10 py-8 flex items-center">
+            <div class="flex-1">
+                <h1 class="text-4xl md:text-5xl font-bold italic font-serif
+                           text-[#FFAB40] leading-tight tracking-wider"
+                    style="text-shadow:2px 2px 0 #fff">
+                    HAVE A<br>GOOD<br>DAY
+                </h1>
+            </div>
+            <div class="flex-1 flex justify-center items-center">
+                <img src="/images/wanita.png"
+                     class="h-64 md:h-72 object-contain">
+            </div>
         </div>
-        <!-- Transaksi Hari Ini -->
-        <div class="p-6 bg-white rounded-lg shadow-md">
-            <h3 class="text-lg font-medium text-gray-600">Transaksi Hari Ini</h3>
-            <p class="mt-2 text-3xl font-bold text-green-600">{{ $transaksiHariIni }}</p>
-            <p class="mt-1 text-sm text-gray-500">Total transaksi</p>
-        </div>
-        <!-- Menu Terjual (Pcs) -->
-        <div class="p-6 bg-white rounded-lg shadow-md">
-            <h3 class="text-lg font-medium text-gray-600">Menu Terjual (Pcs)</h3>
-            <p class="mt-2 text-3xl font-bold text-blue-600">{{ $menuTerjual }}</p>
-            <p class="mt-1 text-sm text-gray-500">Total item terjual</p>
-        </div>
-        <!-- Stok Kritis -->
-        <div class="p-6 bg-white rounded-lg shadow-md">
-            <h3 class="text-lg font-medium text-gray-600">Stok Kritis</h3>
-            <p class="mt-2 text-3xl font-bold text-red-600">{{ $stokKritis }}</p>
-            <p class="mt-1 text-sm text-gray-500">Item dengan stok < 5</p>
-        </div>
-    </div>
 
-    <!-- Grafik dan Item Terlaris -->
-    <div class="grid grid-cols-1 gap-6 mt-6 lg:grid-cols-3">
-        <!-- Grafik Pendapatan -->
-        <div class="p-6 bg-white rounded-lg shadow-md lg:col-span-2">
-            <h3 class="mb-4 text-xl font-semibold">Grafik Pendapatan (7 Hari Terakhir)</h3>
-            <!-- Container dengan tinggi tetap agar grafik muncul -->
-            <div class="relative h-72 w-full">
+        {{-- OVERVIEW --}}
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-[#FFF9C4] rounded-2xl p-5">
+                <h3 class="text-xs font-bold font-mono uppercase tracking-widest text-[#8D6E63] mb-2">
+                    Pendapatan
+                </h3>
+                <p class="text-2xl font-bold text-[#3E2723]">
+                    Rp {{ number_format($pendapatanHariIni,0,',','.') }}
+                </p>
+            </div>
+
+            <div class="bg-[#FFF9C4] rounded-2xl p-5">
+                <h3 class="text-xs font-bold font-mono uppercase tracking-widest text-[#8D6E63] mb-2">
+                    Transaksi
+                </h3>
+                <p class="text-2xl font-bold text-[#3E2723]">
+                    {{ $transaksiHariIni }}
+                </p>
+            </div>
+
+            <div class="bg-[#FFF9C4] rounded-2xl p-5">
+                <h3 class="text-xs font-bold font-mono uppercase tracking-widest text-[#8D6E63] mb-2">
+                    Terjual
+                </h3>
+                <p class="text-2xl font-bold text-[#3E2723]">
+                    {{ $menuTerjual }} <span class="text-sm font-normal">Pcs</span>
+                </p>
+            </div>
+
+            <div class="bg-[#FFAB40] rounded-2xl p-5 text-white">
+                <h3 class="text-xs font-bold font-mono uppercase tracking-widest mb-2 opacity-90">
+                    Stok Kritis
+                </h3>
+                <p class="text-2xl font-bold">
+                    {{ $stokKritis }} Produk
+                </p>
+            </div>
+        </div>
+
+        {{-- CONTENT --}}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <div class="lg:col-span-2 bg-[#FFC107] rounded-3xl p-6 h-64">
+                <h3 class="text-sm font-bold font-mono uppercase tracking-wider text-[#3E2723] mb-3">
+                    Grafik Pendapatan Mingguan
+                </h3>
                 <canvas id="revenueChart"></canvas>
             </div>
-        </div>
 
-        <!-- Item Terlaris Hari Ini -->
-        <div class="p-6 bg-white rounded-lg shadow-md">
-            <h3 class="mb-4 text-xl font-semibold">Item Terlaris Hari Ini</h3>
-            <div class="space-y-4 overflow-y-auto max-h-72">
-                @forelse ($itemTerlaris as $item)
-                    <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded transition">
-                        <div>
-                            <p class="font-medium text-gray-800">{{ $item->product->name ?? 'Menu Dihapus' }}</p>
-                            <p class="text-sm text-gray-500">{{ $item->product->category->name ?? '' }}</p>
-                        </div>
-                        <span class="px-3 py-1 text-sm font-bold text-indigo-800 bg-indigo-100 rounded-full">{{ $item->total_terjual }}x</span>
+            <div class="bg-[#FFF9C4] rounded-3xl p-6">
+                <h3 class="text-sm font-bold font-mono uppercase tracking-wider text-[#3E2723] mb-3">
+                    Produk Terlaris
+                </h3>
+
+                @forelse($itemTerlaris as $item)
+                    <div class="flex justify-between text-sm text-[#3E2723] mb-2">
+                        <span class="truncate">
+                            {{ $item->product->name ?? 'Dihapus' }}
+                        </span>
+                        <span class="font-bold">
+                            {{ $item->total_terjual }}
+                        </span>
                     </div>
                 @empty
-                    <p class="text-center text-gray-500 py-4">Belum ada penjualan hari ini.</p>
+                    <p class="text-xs italic text-[#5D4037]">
+                        Tidak ada produk terlaris hari ini
+                    </p>
                 @endforelse
             </div>
+
         </div>
     </div>
 </div>
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const ctx = document.getElementById('revenueChart');
-        
-        // Data dari controller (Menggunakan json_encode eksplisit untuk menghindari SyntaxError)
-        const chartLabels = {!! json_encode($labels) !!};
-        const chartData = {!! json_encode($data) !!};
-
-        if (ctx) {
-            new Chart(ctx.getContext('2d'), {
-                type: 'line', // UBAH KE LINE (GARIS)
-                data: {
-                    labels: chartLabels,
-                    datasets: [{
-                        label: 'Pendapatan',
-                        data: chartData,
-                        backgroundColor: 'rgba(79, 70, 229, 0.2)', // Warna area bawah garis (lebih transparan)
-                        borderColor: 'rgba(79, 70, 229, 1)', // Warna garis utama (Indigo)
-                        borderWidth: 3, // Garis lebih tebal sedikit
-                        tension: 0.4, // Membuat garis melengkung (smooth)
-                        fill: true, // Mengisi area di bawah garis
-                        pointBackgroundColor: '#ffffff', // Titik data putih
-                        pointBorderColor: 'rgba(79, 70, 229, 1)', // Pinggiran titik ungu
-                        pointBorderWidth: 2,
-                        pointRadius: 4,
-                        pointHoverRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false, // Penting agar mengikuti tinggi container
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            padding: 12,
-                            titleFont: { size: 13 },
-                            bodyFont: { size: 14 },
-                            displayColors: false,
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.y !== null) {
-                                        label += new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(context.parsed.y);
-                                    }
-                                    return label;
-                                }
-                            }
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Revenue Chart
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    const revenueChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($labels) !!},
+            datasets: [{
+                label: 'Pendapatan Harian',
+                data: {!! json_encode($data) !!},
+                borderColor: '#3E2723',
+                backgroundColor: 'rgba(62, 39, 35, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#FFAB40',
+                pointBorderColor: '#3E2723',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'Rp ' + value.toLocaleString('id-ID');
+                        },
+                        color: '#3E2723',
+                        font: {
+                            size: 12,
+                            weight: 'bold'
                         }
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                borderDash: [2, 2],
-                                color: '#e5e7eb'
-                            },
-                            ticks: {
-                                // Format Rupiah Singkat (misal 1jt, 500rb)
-                                callback: function(value, index, values) {
-                                    return new Intl.NumberFormat('id-ID', { notation: "compact", compactDisplay: "short" }).format(value);
-                                },
-                                font: { size: 11 }
-                            }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { font: { size: 11 } }
+                    grid: {
+                        color: 'rgba(62, 39, 35, 0.1)'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#3E2723',
+                        font: {
+                            size: 12,
+                            weight: 'bold'
                         }
+                    },
+                    grid: {
+                        color: 'rgba(62, 39, 35, 0.1)'
                     }
                 }
-            });
+            }
         }
     });
+});
 </script>
 @endpush
+
 @endsection

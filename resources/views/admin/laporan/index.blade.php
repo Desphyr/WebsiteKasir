@@ -9,18 +9,18 @@
     <!-- Notifikasi Sukses/Error -->
     @include('layouts.partials.notifications')
 
-    <div class="p-6 bg-white rounded-lg shadow-md">
+    <div class="p-6 bg-[#FFF9C4] rounded-lg shadow-md">
         <!-- Filter Tanggal & Ekspor -->
         <form method="GET" action="{{ route('admin.laporan.index') }}">
             <div class="flex flex-col items-center justify-between mb-4 space-y-3 md:flex-row md:space-y-0">
                 <div class="flex items-center space-x-2">
                     <label for="start_date" class="text-sm font-medium text-gray-700">Dari:</label>
                     <input type="date" name="start_date" id="start_date" value="{{ $startDate ?? '' }}"
-                           class="px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                    <label for="end_date" class="text-sm font-medium text-gray-700">Sampai:</label>
+                           class="px-4 py-2 border border-yellow-300 rounded-md focus:ring-yellow-400 focus:border-yellow-400">
+                    <label for="end_date" class="text-sm font-medium text-[#8D6E63]">Sampai:</label>
                     <input type="date" name="end_date" id="end_date" value="{{ $endDate ?? '' }}"
-                           class="px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
+                           class="px-4 py-2 border border-yellow-300 rounded-md focus:ring-yellow-400 focus:border-yellow-400">
+                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-orange-400 rounded-md hover:bg-orange-500">
                         Filter
                     </button>
                 </div>
@@ -34,18 +34,18 @@
 
         <!-- Tabel Laporan -->
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+            <table class="min-w-full divide-y divide-yellow-200">
+                <thead class="bg-[#FFF8E1]">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">No</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Waktu</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Tipe Pembayaran</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Nama Kasir</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Detail Pesanan</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Total</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-[#8D6E63] uppercase">No</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-[#8D6E63] uppercase">Waktu</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-[#8D6E63] uppercase">Tipe Pembayaran</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-[#8D6E63] uppercase">Nama Kasir</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-[#8D6E63] uppercase">Detail Pesanan</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-[#8D6E63] uppercase">Total</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="bg-[#FFF9C4] divide-y divide-yellow-200">
                     @forelse ($transactions as $index => $transaction)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $transactions->firstItem() + $index }}</td>

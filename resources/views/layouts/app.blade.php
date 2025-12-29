@@ -23,9 +23,9 @@
         [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="bg-gray-100 font-sans antialiased">
+<body class="bg-[#FFFBF0] font-sans antialiased">
     
-    <div x-data="{ sidebarOpen: false }" class="flex flex-col h-screen bg-gray-100">
+    <div x-data="{ sidebarOpen: false }" class="flex flex-col h-screen bg-[#FFFBF0]">
         @auth
         <!-- Header dengan design retro -->
         @include('layouts.partials.header')
@@ -115,7 +115,7 @@
             @endauth
             
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4 lg:p-6">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-[#FFFBF0] p-4 lg:p-6 min-h-0">
                 @yield('content')
             </main>
         </div>
