@@ -33,7 +33,12 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name',
+            'name' => [
+                'required', 'string', 'max:255',
+                Rule::unique('categories', 'name'),
+            ],
+        ], [
+            'name.unique' => 'nama kategori sudah ada',
         ]);
 
         Category::create($request->all());
@@ -79,3 +84,4 @@ class CategoryController extends Controller
                          ->with('success', 'Kategori berhasil dihapus.');
     }
 }
+

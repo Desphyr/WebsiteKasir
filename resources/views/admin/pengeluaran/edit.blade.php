@@ -28,7 +28,7 @@
                 </div>
                 <div>
                     <label for="amount" class="block text-sm font-medium text-gray-700">Jumlah (Rp)</label>
-                    <input type="number" name="amount" id="amount" value="{{ old('amount', $expense->amount) }}" required min="0"
+                    <input type="number" name="amount" id="amount" value="{{ old('amount', $expense->amount) }}" required min="1"
                            class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
                 <div>

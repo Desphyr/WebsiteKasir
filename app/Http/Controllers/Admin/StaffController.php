@@ -36,10 +36,26 @@ class StaffController extends Controller
     {
         $request->validate([
             'full_name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users',
+            'username' => [
+                'required', 'string', 'max:255',
+                Rule::unique('users'),
+                function ($attribute, $value, $fail) {
+                    if (User::where('username', $value)->exists()) {
+                        $fail('username sudah digunakan');
+                    }
+                },
+            ],
             'role' => 'required|in:admin,kasir',
-            'password' => ['required', 'confirmed', Password::min(8)],
+            'password' => [
+                'required',
+                'confirmed',
+                Password::min(8),
+            ],
             'email' => 'nullable|string|email|max:255|unique:users',
+        ], [
+            'password.min' => 'password harus berisi 8 karakter',
+            'password.confirmed' => 'password tidak cocok',
+            'username.unique' => 'username sudah digunakan',
         ]);
 
         User::create([
@@ -47,7 +63,7 @@ class StaffController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'role' => $request->role,
-            'password' => Hash::make($request->password), // NF-02: Hash password
+            'password' => Hash::make($request->password),
         ]);
 
         return redirect()->route('admin.staf.index')
@@ -74,6 +90,9 @@ class StaffController extends Controller
                 Rule::unique('users')->ignore($staf->id),
             ],
             'password' => ['nullable', 'confirmed', Password::min(8)], // Password opsional
+        ], [
+            'password.min' => 'password harus berisi 8 karakter',
+            'password.confirmed' => 'password tidak cocok',
         ]);
 
         $data = $request->only('full_name', 'username', 'email', 'role');
@@ -102,3 +121,4 @@ class StaffController extends Controller
                          ->with('success', 'Staf berhasil dihapus.');
     }
 }
+

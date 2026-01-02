@@ -10,7 +10,16 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <!-- Chart.js (Untuk Dashboard) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- IBM Plex Mono Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* IBM Plex Mono untuk sidebar */
+        .sidebar-menu {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
         /* Sembunyikan scrollbar untuk chrome, safari, opera */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
@@ -33,7 +42,7 @@
                 <span class="text-2xl font-bold">Bakaran Dua Hati</span>
             </div>
             
-            <nav class="mt-4">
+            <nav class="mt-4 sidebar-menu">
                 @if(Auth::user()->role === 'admin')
                     <!-- Menu Admin -->
                     <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.dashboard*') ? 'bg-gray-700 font-bold' : '' }}">Dashboard</a>
@@ -47,8 +56,6 @@
                 @elseif(Auth::user()->role === 'kasir')
                     <!-- Menu Kasir -->
                     <a href="{{ route('kasir.pos') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white {{ request()->routeIs('kasir.pos*') ? 'bg-gray-700 font-bold' : '' }}">Halaman Kasir</a>
-                    <!-- Kasir bisa punya profil juga -->
-                    <!-- <a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white">Profil</a> -->
                 @endif
                 
                 <!-- Tombol Logout -->
@@ -83,3 +90,4 @@
     @stack('scripts') <!-- Untuk script tambahan per halaman -->
 </body>
 </html>
+

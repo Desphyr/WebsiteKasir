@@ -17,7 +17,7 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.staf.update', $staff->id) }}" method="POST">
+        <form action="{{ route('admin.staf.update', $staff->id) }}" method="POST" id="stafForm">
             @csrf
             @method('PUT')
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -56,11 +56,13 @@
                     <label for="password" class="block text-sm font-medium text-gray-700">Password Baru</label>
                     <input type="password" name="password" id="password"
                            class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <p id="password_error" class="mt-1 text-sm text-red-600 hidden"></p>
                 </div>
                 <div>
                     <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Konfirmasi Password Baru</label>
                     <input type="password" name="password_confirmation" id="password_confirmation"
                            class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <p id="password_confirmation_error" class="mt-1 text-sm text-red-600 hidden"></p>
                 </div>
             </div>
             
@@ -68,11 +70,63 @@
                 <a href="{{ route('admin.staf.index') }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">
                     Batal
                 </a>
-                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
+                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700" id="submitBtn">
                     Update Staf
                 </button>
             </div>
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const password = document.getElementById('password');
+    const passwordConfirmation = document.getElementById('password_confirmation');
+    const passwordError = document.getElementById('password_error');
+    const passwordConfirmationError = document.getElementById('password_confirmation_error');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function validatePassword() {
+        const passwordValue = password.value;
+        let isValid = true;
+
+        // Validasi panjang password (hanya jika password diisi)
+        if (passwordValue.length > 0 && passwordValue.length < 8) {
+            passwordError.textContent = 'password harus berisi 8 karakter';
+            passwordError.classList.remove('hidden');
+            password.classList.add('border-red-500');
+            isValid = false;
+        } else {
+            passwordError.classList.add('hidden');
+            password.classList.remove('border-red-500');
+        }
+
+        // Validasi konfirmasi password (hanya jika konfirmasi diisi)
+        if (passwordConfirmation.value.length > 0 && passwordValue !== passwordConfirmation.value) {
+            passwordConfirmationError.textContent = 'password tidak cocok';
+            passwordConfirmationError.classList.remove('hidden');
+            passwordConfirmation.classList.add('border-red-500');
+            isValid = false;
+        } else {
+            passwordConfirmationError.classList.add('hidden');
+            passwordConfirmation.classList.remove('border-red-500');
+        }
+
+        submitBtn.disabled = !isValid;
+        if (!isValid) {
+            submitBtn.classList.add('bg-gray-400', 'cursor-not-allowed', 'shadow-none');
+            submitBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+        } else {
+            submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed', 'shadow-none');
+            submitBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+        }
+    }
+
+    password.addEventListener('input', validatePassword);
+    passwordConfirmation.addEventListener('input', validatePassword);
+});
+</script>
+@endpush
 @endsection
+
