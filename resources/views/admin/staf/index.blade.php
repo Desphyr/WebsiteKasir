@@ -4,23 +4,23 @@
 
 @section('content')
 <div class="container p-4 mx-auto">
-    <h1 class="mb-6 text-3xl font-bold">Manajemen Staf</h1>
+    <h1 class="mb-6 text-3xl font-bold">Kelola Staf</h1>
 
     <!-- Notifikasi Sukses/Error -->
     @include('layouts.partials.notifications')
 
-    <div class="p-6 bg-white rounded-lg shadow-md">
+    <div class="p-6 bg-[#FFF9C4] rounded-lg shadow-md">
         <!-- Aksi: Tambah & Search -->
         <div class="flex flex-col items-center justify-between mb-4 space-y-3 md:flex-row md:space-y-0">
-            <a href="{{ route('admin.staf.create') }}" class="w-full px-4 py-2 font-medium text-center text-white bg-indigo-600 rounded-md md:w-auto hover:bg-indigo-700">
+            <a href="{{ route('admin.staf.create') }}" class="w-full px-4 py-2 font-medium text-center text-white bg-orange-400 rounded-md md:w-auto hover:bg-orange-500">
                 + Tambah Staf Baru
             </a>
 
             <form method="GET" action="{{ route('admin.staf.index') }}" class="w-full md:w-1/3">
                 <div class="relative">
                     <input type="text" name="search" placeholder="Cari nama atau username..." value="{{ $search ?? '' }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                    <button type="submit" class="absolute inset-y-0 right-0 px-4 text-gray-600">
+                           class="w-full px-4 py-2 border border-yellow-300 rounded-md focus:ring-yellow-400 focus:border-yellow-400">
+                    <button type="submit" class="absolute inset-y-0 right-0 px-4 text-[#8D6E63]">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </button>
                 </div>
@@ -29,17 +29,17 @@
 
         <!-- Tabel Staf -->
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+            <table class="min-w-full divide-y divide-yellow-200">
+                <thead class="bg-[#FFF8E1]">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">No</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Nama Lengkap</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Username</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Role</th>
-                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-right text-gray-500 uppercase">Aksi</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-[#8D6E63] uppercase">No</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-[#8D6E63] uppercase">Nama Lengkap</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-[#8D6E63] uppercase">Username</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-[#8D6E63] uppercase">Role</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-right text-[#8D6E63] uppercase">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="bg-[#FFF9C4] divide-y divide-yellow-200">
                     @forelse ($staff as $index => $user)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $staff->firstItem() + $index }}</td>
