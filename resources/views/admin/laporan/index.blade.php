@@ -26,8 +26,7 @@
                 </div>
                 
                 <a href="{{ route('admin.laporan.export', ['start_date' => $startDate, 'end_date' => $endDate]) }}" 
-                   class="w-full px-4 py-2 font-medium text-center text-white rounded-md md:w-auto hover:bg-green-700 {{ $transactions->isEmpty() ? 'bg-gray-400 cursor-not-allowed pointer-events-none' : 'bg-green-600' }}"
-                   {{ $transactions->isEmpty() ? 'tabindex="-1"' : '' }}>
+                   class="w-full px-4 py-2 font-medium text-center text-white bg-green-600 rounded-md md:w-auto hover:bg-green-700">
                     Ekspor ke Excel
                 </a>
             </div>
@@ -56,7 +55,6 @@
                                     {{ $transaction->payment_type }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Rp {{ number_format($transaction->total_amount, 0, ',', '.') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ $transaction->user->full_name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-700">
                                 <ul class="list-disc list-inside">
@@ -65,28 +63,11 @@
                                     @endforeach
                                 </ul>
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Rp {{ number_format($transaction->total_amount, 0, ',', '.') }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-10 text-center text-gray-500 whitespace-nowrap">
-                                @if(isset($startDate) && isset($endDate) && $startDate && $endDate)
-                                    <div class="flex flex-col items-center">
-                                        <svg class="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                        </svg>
-                                        <p class="text-lg font-medium">Tidak ada transaksi pada rentang tanggal ini</p>
-                                        <p class="text-sm">Coba ubah filter tanggal pencarian</p>
-                                    </div>
-                                @else
-                                    <div class="flex flex-col items-center">
-                                        <svg class="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                                        </svg>
-                                        <p class="text-lg font-medium">Belum ada data transaksi</p>
-                                        <p class="text-sm">Transaksi akan muncul di sini setelah kasir melakukan penjualan</p>
-                                    </div>
-                                @endif
-                            </td>
+                            <td colspan="6" class="px-6 py-4 text-center text-gray-500 whitespace-nowrap">Tidak ada transaksi pada rentang tanggal ini.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -100,4 +81,3 @@
     </div>
 </div>
 @endsection
-

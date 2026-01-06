@@ -30,7 +30,7 @@ class ExpenseController extends Controller
     {
         $request->validate([
             'description' => 'required|string|max:500',
-            'amount' => 'required|numeric|min:1',
+            'amount' => 'required|numeric|min:0',
             'expense_date' => 'required|date',
         ]);
 
@@ -55,7 +55,7 @@ class ExpenseController extends Controller
     {
         $request->validate([
             'description' => 'required|string|max:500',
-            'amount' => 'required|numeric|min:1',
+            'amount' => 'required|numeric|min:0',
             'expense_date' => 'required|date',
         ]);
 
@@ -72,4 +72,3 @@ class ExpenseController extends Controller
                          ->with('success', 'Pengeluaran berhasil dihapus.');
     }
 }
-
