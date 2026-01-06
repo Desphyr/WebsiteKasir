@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Riwayat Pesanan')
+@section('title', 'History Order')
 
 @section('content')
 <div class="flex flex-col h-full" x-data="historySystem()">
@@ -106,24 +106,14 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-10 text-center text-gray-500 whitespace-nowrap">
-                            @if(request('start_date') || request('end_date') || request('period'))
-                                <div class="flex flex-col items-center">
-                                    <svg class="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                    </svg>
-                                    <p class="text-lg font-medium">Tidak ada transaksi pada rentang tanggal ini</p>
-                                    <p class="text-sm">Coba ubah filter atau tanggal pencarian</p>
-                                </div>
-                            @else
-                                <div class="flex flex-col items-center">
-                                    <svg class="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                                    </svg>
-                                    <p class="text-lg font-medium">Belum ada data transaksi</p>
-                                    <p class="text-sm">Transaksi akan muncul di sini setelah Anda melakukan penjualan</p>
-                                </div>
-                            @endif
+                        <td colspan="5" class="px-6 py-10 text-center text-gray-500">
+                            <div class="flex flex-col items-center">
+                                <svg class="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                <p class="text-lg font-medium">Tidak ada transaksi ditemukan</p>
+                                <p class="text-sm">Coba ubah filter atau tanggal pencarian</p>
+                            </div>
                         </td>
                     </tr>
                     @endforelse
@@ -170,4 +160,3 @@
 </script>
 @endpush
 @endsection
-

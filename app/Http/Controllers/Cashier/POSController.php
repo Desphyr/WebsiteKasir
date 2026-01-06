@@ -21,7 +21,7 @@ class POSController extends Controller
     public function index(Request $request)
     {
         $categories = Category::all();
-        $query = Product::query(); // Hapus filter 'stock > 0' agar menu stok 0 tetap muncul
+        $query = Product::where('stock', '>', 0); // Hanya tampilkan yg ada stok
 
         // Filter Kategori
         if ($request->has('kategori') && $request->kategori != '') {
@@ -92,7 +92,7 @@ class POSController extends Controller
                     'transaction_id' => $transaction->id,
                     'product_id' => $item['id'],
                     'quantity' => $item['quantity'],
-                    'price_per_item' => $item['price'],
+                    'price_per_item' => $item['price'], // Harga saat itu
                 ]);
 
                 // Kurangi stok
@@ -110,6 +110,7 @@ class POSController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            // NF-04: Pesan error jelas
             return back()->with('error', 'Transaksi Gagal: ' . $e->getMessage());
         }
     }
@@ -117,7 +118,7 @@ class POSController extends Controller
     public function history(Request $request)
     {
         $query = Transaction::with(['user', 'details.product'])
-            ->where('user_id', Auth::id());
+            ->where('user_id', Auth::id()); // Hanya tampilkan transaksi user ini
 
         // Filter berdasarkan tanggal
         if ($request->has('start_date') && $request->start_date) {
@@ -144,7 +145,7 @@ class POSController extends Controller
         }
 
         $transactions = $query->orderBy('transaction_time', 'desc')
-            ->paginate(15);
+            ->paginate(15); // Pagination untuk performance
 
         return view('cashier.history', compact('transactions'));
     }
@@ -285,4 +286,3 @@ class POSController extends Controller
         }
     }
 }
-
