@@ -58,7 +58,7 @@
                                     @break
                                 @case('kasir.pos.history')
                                 @case('kasir.pos.history.show')
-                                    Riwayat Transaksi
+                                    Riwayat Pesanan
                                     @break
                                 @default
                                     Point of Sale (POS)

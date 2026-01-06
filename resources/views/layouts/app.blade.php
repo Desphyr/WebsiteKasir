@@ -11,6 +11,8 @@
     <!-- Chart.js (Untuk Dashboard) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+        
         /* Sembunyikan scrollbar untuk chrome, safari, opera */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
@@ -21,6 +23,17 @@
             scrollbar-width: none; /* Firefox */
         }
         [x-cloak] { display: none !important; }
+        
+        /* Sidebar font - IBM Plex Mono dengan !important */
+        aside { 
+            font-family: 'IBM Plex Mono', monospace !important;
+        }
+        aside * {
+            font-family: 'IBM Plex Mono', monospace !important;
+        }
+        .font-mono {
+            font-family: 'IBM Plex Mono', monospace !important;
+        }
     </style>
 </head>
 <body class="bg-[#FFFBF0] font-sans antialiased">
@@ -44,7 +57,7 @@
         <div class="flex flex-1 overflow-hidden">
             <!-- Sidebar (Hanya tampil jika user login) -->
             @auth
-            <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 z-30 w-64 transform bg-yellow-100 text-gray-900 overflow-y-auto transition duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 shadow-lg">
+            <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 z-30 w-64 transform bg-yellow-100 text-gray-900 overflow-y-auto transition duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 shadow-lg font-['IBM_Plex_Mono']">
 
                 <!-- Ikon Atas -->
                 <div class="p-6 border-b-2 border-yellow-300">
@@ -94,9 +107,9 @@
                             Kelola staf
                         </a>
                         
-                        <!-- Pembukuan -->
+                        <!-- Catat Pengeluaran -->
                         <a href="{{ route('admin.pengeluaran.index') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.pengeluaran*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
-                            <span class="lowercase">pembukuan</span>
+                            <span class="lowercase">Catat Pengeluaran</span>
                         </a>
                     
                     @elseif(Auth::user()->role === 'kasir')
@@ -105,9 +118,9 @@
                             POS
                         </a>
                         
-                        <!-- Riwayat Transaksi -->
+                        <!-- Riwayat Pesanan -->
                         <a href="{{ route('kasir.pos.history') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('kasir.pos.history*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
-                            History
+                            Riwayat Pesanan
                         </a>
                     @endif
                 </nav>

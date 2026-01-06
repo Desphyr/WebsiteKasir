@@ -40,6 +40,10 @@ class StaffController extends Controller
             'role' => 'required|in:admin,kasir',
             'password' => ['required', 'confirmed', Password::min(8)],
             'email' => 'nullable|string|email|max:255|unique:users',
+        ], [
+            'username.unique' => 'username sudah digunakan',
+            'password.confirmed' => 'password tidak cocok',
+            'password.min' => 'password harus berisi 8 karakter',
         ]);
 
         User::create([
@@ -47,7 +51,7 @@ class StaffController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'role' => $request->role,
-            'password' => Hash::make($request->password), // NF-02: Hash password
+            'password' => Hash::make($request->password),
         ]);
 
         return redirect()->route('admin.staf.index')
@@ -73,7 +77,10 @@ class StaffController extends Controller
                 'nullable', 'string', 'email', 'max:255',
                 Rule::unique('users')->ignore($staf->id),
             ],
-            'password' => ['nullable', 'confirmed', Password::min(8)], // Password opsional
+            'password' => ['nullable', 'confirmed', Password::min(8)],
+        ], [
+            'password.confirmed' => 'password tidak cocok',
+            'password.min' => 'password harus berisi 8 karakter',
         ]);
 
         $data = $request->only('full_name', 'username', 'email', 'role');

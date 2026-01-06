@@ -26,7 +26,7 @@
                 </div>
                 
                 <a href="{{ route('admin.laporan.export', ['start_date' => $startDate, 'end_date' => $endDate]) }}" 
-                   class="w-full px-4 py-2 font-medium text-center text-white bg-green-600 rounded-md md:w-auto hover:bg-green-700">
+                   class="w-full px-4 py-2 font-medium text-center text-white bg-green-600 rounded-md md:w-auto hover:bg-green-700 {{ $transactions->total() === 0 ? 'pointer-events-none opacity-50 cursor-not-allowed' : '' }}">
                     Ekspor ke Excel
                 </a>
             </div>
@@ -67,7 +67,13 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-4 text-center text-gray-500 whitespace-nowrap">Tidak ada transaksi pada rentang tanggal ini.</td>
+                            <td colspan="6" class="px-6 py-10 text-center text-gray-500 whitespace-nowrap">
+                                @if(request('start_date') || request('end_date'))
+                                    Tidak ada transaksi pada rentang tanggal ini.
+                                @else
+                                    Belum ada data transaksi.
+                                @endif
+                            </td>
                         </tr>
                     @endforelse
                 </tbody>

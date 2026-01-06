@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class MenuController extends Controller
 {
@@ -35,7 +36,7 @@ class MenuController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:products,name',
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
@@ -58,7 +59,10 @@ class MenuController extends Controller
     public function update(Request $request, Product $menu)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => [
+                'required', 'string', 'max:255',
+                Rule::unique('products')->ignore($menu->id),
+            ],
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',

@@ -30,12 +30,12 @@ class ExpenseController extends Controller
     {
         $request->validate([
             'description' => 'required|string|max:500',
-            'amount' => 'required|numeric|min:0',
+            'amount' => 'required|numeric|min:1',
             'expense_date' => 'required|date',
         ]);
 
         Expense::create([
-            'user_id' => Auth::id(), // Admin yang login
+            'user_id' => Auth::id(),
             'description' => $request->description,
             'amount' => $request->amount,
             'expense_date' => $request->expense_date,
@@ -55,7 +55,7 @@ class ExpenseController extends Controller
     {
         $request->validate([
             'description' => 'required|string|max:500',
-            'amount' => 'required|numeric|min:0',
+            'amount' => 'required|numeric|min:1',
             'expense_date' => 'required|date',
         ]);
 

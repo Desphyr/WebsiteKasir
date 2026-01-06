@@ -62,7 +62,7 @@
                                 <h3 class="font-bold text-gray-800 text-base leading-tight line-clamp-2 group-hover:text-indigo-600 transition-colors" x-text="product.name"></h3>
                                 <span class="px-2 py-0.5 text-xs font-medium rounded-full border"
                                       :class="product.stock > 5 ? 'text-gray-500 border-gray-200 bg-gray-50' : (product.stock > 0 ? 'text-yellow-600 border-yellow-200 bg-yellow-50' : 'text-red-500 border-red-200 bg-red-50')"
-                                      x-text="`Stok: ${product.stock}`">
+                                      x-text="product.stock > 0 ? 'Stok: ' + product.stock : 'Habis'">
                                 </span>
                             </div>
                         </div>

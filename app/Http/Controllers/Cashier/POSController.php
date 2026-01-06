@@ -21,7 +21,7 @@ class POSController extends Controller
     public function index(Request $request)
     {
         $categories = Category::all();
-        $query = Product::where('stock', '>', 0); // Hanya tampilkan yg ada stok
+        $query = Product::query(); // Tampilkan semua produk termasuk yang stok 0
 
         // Filter Kategori
         if ($request->has('kategori') && $request->kategori != '') {
