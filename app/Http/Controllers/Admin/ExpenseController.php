@@ -32,6 +32,8 @@ class ExpenseController extends Controller
             'description' => 'required|string|max:500',
             'amount' => 'required|numeric|min:1',
             'expense_date' => 'required|date',
+        ], [
+            'amount.min' => 'pengeluaran yang dicatat harus lebih dari 0 Rupiah',
         ]);
 
         Expense::create([
@@ -57,6 +59,8 @@ class ExpenseController extends Controller
             'description' => 'required|string|max:500',
             'amount' => 'required|numeric|min:1',
             'expense_date' => 'required|date',
+        ], [
+            'amount.min' => 'pengeluaran yang dicatat harus lebih dari 0 Rupiah',
         ]);
 
         $pengeluaran->update($request->all());

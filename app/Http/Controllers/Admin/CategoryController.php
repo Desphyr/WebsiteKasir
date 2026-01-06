@@ -34,6 +34,8 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:categories,name',
+        ], [
+            'name.unique' => 'nama kategori sudah ada',
         ]);
 
         Category::create($request->all());
@@ -56,6 +58,8 @@ class CategoryController extends Controller
                 'required', 'string', 'max:255',
                 Rule::unique('categories')->ignore($kategori->id),
             ],
+        ], [
+            'name.unique' => 'nama kategori sudah ada',
         ]);
 
         $kategori->update($request->all());

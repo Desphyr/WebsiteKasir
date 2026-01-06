@@ -41,6 +41,8 @@ class MenuController extends Controller
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'image_url' => 'nullable|url',
+        ], [
+            'name.unique' => 'nama menu sudah ada',
         ]);
 
         $data = $request->only(['name', 'category_id', 'price', 'stock', 'image_url']);
@@ -67,6 +69,8 @@ class MenuController extends Controller
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'image_url' => 'nullable|url',
+        ], [
+            'name.unique' => 'nama menu sudah ada',
         ]);
 
         $data = $request->only(['name', 'category_id', 'price', 'stock', 'image_url']);

@@ -20,18 +20,20 @@
             </div>
         </header>
 
-        <div class="px-6 py-4 grid grid-cols-1 md:grid-cols-3 gap-4 shrink-0">
-            <div class="md:col-span-2 relative">
-                <input type="text" x-model="search" @input.debounce.500ms="filterProducts" placeholder="Cari menu (e.g. Nasi Goreng)..."
-                       class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm">
-                <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        <div class="px-6 py-4 shrink-0">
+            <div class="flex gap-4 items-center">
+                <div class="relative w-64 shrink-0">
+                    <input type="text" x-model="search" @input.debounce.500ms="filterProducts" placeholder="Cari menu (e.g. Nasi Goreng)..."
+                           class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm">
+                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                <select x-model="category" @change="filterProducts" class="py-2.5 px-4 bg-white border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm w-48 shrink-0">
+                    <option value="">Semua Kategori</option>
+                    @foreach($categories as $category)
+                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
             </div>
-            <select x-model="category" @change="filterProducts" class="w-full py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                <option value="">Semua Kategori</option>
-                @foreach($categories as $category)
-                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                @endforeach
-            </select>
         </div>
 
         <main class="flex-1 overflow-y-auto p-6 pt-0 scroll-smooth custom-scrollbar">
