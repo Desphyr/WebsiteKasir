@@ -3,7 +3,7 @@
 @section('title', 'Point of Sale (POS)')
 
 @section('content')
-<div class="flex h-[calc(100vh-(--spacing(16)))] bg-[#FFFBF0]" x-data="posSystem()">
+<div class="flex h-[calc(100vh-(--spacing(16)))] bg-[#FAF7E8]" x-data="posSystem()">
     
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         
