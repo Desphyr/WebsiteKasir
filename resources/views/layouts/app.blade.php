@@ -89,12 +89,12 @@
                         
                         <!-- Kelola Menu -->
                         <a href="{{ route('admin.menu.index') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.menu*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
-                            Kelola menu
+                            Kelola Menu
                         </a>
                         
                         <!-- Kelola Kategori -->
                         <a href="{{ route('admin.kategori.index') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.kategori*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
-                            Kelola kategori
+                            Kelola Kategori
                         </a>
                         
                         <!-- Laporan Penjualan -->
@@ -104,12 +104,12 @@
                         
                         <!-- Kelola Staf -->
                         <a href="{{ route('admin.staf.index') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.staf*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
-                            Kelola staf
+                            Kelola Staf
                         </a>
                         
                         <!-- Catat Pengeluaran -->
                         <a href="{{ route('admin.pengeluaran.index') }}" class="flex items-center px-4 py-3 mb-3 text-gray-800 font-mono italic rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.pengeluaran*') ? 'bg-orange-400 font-bold shadow-md' : 'hover:bg-yellow-200' }}">
-                            <span class="lowercase">Catat Pengeluaran</span>
+                            <span>Catat Pengeluaran</span>
                         </a>
                     
                     @elseif(Auth::user()->role === 'kasir')
