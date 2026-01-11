@@ -3,7 +3,7 @@
 @section('title', 'Point of Sale (POS)')
 
 @section('content')
-<div class="flex h-[calc(100vh-(--spacing(16)))] bg-[#FFFBF0]" x-data="posSystem()">
+<div class="flex h-[calc(100vh-(--spacing(16)))] bg-[#FAF7E8]" x-data="posSystem()">
     
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         
@@ -82,7 +82,7 @@
             </div>
         </main>
     </div>
-
+s
     <!-- Fixed Payment Bar -->
     <div class="w-96 bg-white border-l border-gray-200 flex flex-col shadow-2xl z-20 fixed right-0 top-[calc(4rem+1px)] h-[calc(100vh-4rem)]">
         

@@ -3,7 +3,7 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div class="min-h-screen bg-[#FFFBF0] overflow-x-hidden">
+<div class="min-h-screen bg-[#FAF7E8] overflow-x-hidden">
     <div class="max-w-6xl mx-auto px-6 py-6 space-y-6">
 
         {{-- HEADER --}}

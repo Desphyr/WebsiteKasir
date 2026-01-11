@@ -36,9 +36,9 @@
         }
     </style>
 </head>
-<body class="bg-[#FFFBF0] font-sans antialiased">
+<body class="bg-[#FAF7E8] font-sans antialiased">
     
-    <div x-data="{ sidebarOpen: false }" class="flex flex-col h-screen bg-[#FFFBF0]">
+    <div x-data="{ sidebarOpen: false }" class="flex flex-col h-screen bg-[#FAF7E8]">
         @auth
         <!-- Header dengan design retro -->
         @include('layouts.partials.header')
@@ -128,7 +128,7 @@
             @endauth
             
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-[#FFFBF0] p-4 lg:p-6 min-h-0">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-[#FAF7E8] p-4 lg:p-6 min-h-0">
                 @yield('content')
             </main>
         </div>
@@ -137,3 +137,4 @@
     @stack('scripts') <!-- Untuk script tambahan per halaman -->
 </body>
 </html>
+
