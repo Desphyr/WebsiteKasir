@@ -22,6 +22,12 @@ class User extends Authenticatable implements CanResetPassword
         'password', 'remember_token',
     ];
 
+    // Accessor untuk name (alias dari full_name)
+    public function getNameAttribute()
+    {
+        return $this->full_name;
+    }
+
     // Relasi: User (Kasir) melayani banyak Transaksi
     public function transactions() {
         return $this->hasMany(Transaction::class);
